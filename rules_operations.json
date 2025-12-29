@@ -1,0 +1,12 @@
+{
+    "rules": [],
+    "operations": [
+        {
+            "home_operations": [
+                "close curtain",
+                "turn off light"
+            ],
+            "operation_name": "dark mode"
+        }
+    ]
+}

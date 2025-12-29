@@ -1,0 +1,1 @@
+{"Good Night Mode": ["unlock the doors", "set the thermostat to cool mode", "turn on the tv", "turn on the light", "close the curtain"], "Open the cinema Mood": ["Open the curtain", "turn on the tv", "make popcorn"], "Good Morning": ["Open the curtain", "turn on the tv", "make coffee"]}
