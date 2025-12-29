@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Home Dashboard</title>
+    <style>
+        /* --- GENEL SAYFA STİLLERİ --- */
+        body { 
+            background-color: #1a1a1a; 
+            color: white; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 40px; 
+            margin: 0;
+        }
+
+        h1 { margin-bottom: 40px; font-weight: 300; letter-spacing: 2px; }
+
+        /* --- KART IZGARASI (GRID) --- */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 25px; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+
+        /* --- CİHAZ KARTLARI --- */
+        .card { 
+            background: #2d2d2d; 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s, background-color 0.3s; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card:hover { transform: translateY(-5px); background: #333; }
+        
+        .icon { font-size: 50px; margin-bottom: 15px; display: block; }
+        
+        h3 { margin: 10px 0 5px 0; font-size: 16px; color: #aaa; }
+        
+        p { font-size: 18px; margin: 0; font-weight: bold; }
+
+        /* --- STANDART DURUM RENKLERİ --- */
+        /* Açık / Pozitif Durumlar (Yeşil) */
+        .status-on, .status-open, .status-unlocked, .status-unlock { 
+            color: #4caf50; 
+            text-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        } 
+        
+        /* Kapalı / Negatif Durumlar (Kırmızı) */
+        .status-off, .status-closed, .status-locked, .status-lock { 
+            color: #f44336; 
+        } 
+        
+        /* --- TERMOSTAT ÖZEL RENKLERİ --- */
+        /* Veritabanındaki "set_mode_..." isimleriyle birebir eşleşir */
+        
+        .status-set_mode_cool { 
+            color: #2196f3; /* Mavi */
+            text-shadow: 0 0 10px #2196f3; 
+        } 
+        
+        .status-heat { 
+            color: #ff5722; /* Turuncu/Ateş */
+            text-shadow: 0 0 10px #ff5722; 
+        } 
+        
+        .status-fan_only { 
+            color: #00bcd4; /* Cam Göbeği */
+        } 
+        
+        .status-auto { 
+            color: #9c27b0; /* Mor */
+        }
+        
+        .status-off {
+            color: #757575; /* Gri */
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>🏠 Agent Control Center</h1>
+    
+    <div id="dashboard" class="grid">
+        Loading devices...
+    </div>
+
+    <script>
+        // Cihazlar için ikon eşleştirmeleri
+        const icons = { 
+            "light": "💡", 
+            "tv": "📺", 
+            "curtain": "🪟", 
+            "door_lock": "🔒", 
+            "thermostat_mode": "🌡️", 
+            "main_water_valve": "🚰" 
+        };
+
+        async function update() {
+            try {
+                // API'den durumu çek
+                const res = await fetch('/status'); 
+                const data = await res.json();
+                
+                const board = document.getElementById('dashboard');
+                board.innerHTML = ''; 
+
+                // Her cihaz için döngü
+                for (const [device, state] of Object.entries(data)) {
+                    
+                    let statusClass = "status-off"; // Varsayılan renk
+                    let displayState = state.toUpperCase(); // Varsayılan yazı
+                    let icon = icons[device] || '❓';
+
+                    // --- MANTIK 1: Termostat Modları ---
+                    if (state.startsWith("set_mode_")) {
+                        // Class ismi örn: 'status-set_mode_cool' (CSS ile eşleşir)
+                        statusClass = `status-${state}`; 
+                        
+                        // Ekranda 'SET_MODE_COOL' yerine sadece 'COOL' yazsın
+                        displayState = state.replace("set_mode_", "").toUpperCase();
+                    } 
+                    // --- MANTIK 2: Standart Cihazlar ---
+                    else {
+                        // Pozitif durumlar listesi
+                        const positive = ['on', 'open', 'unlocked', 'unlock', 'auto'];
+                        
+                        if (positive.includes(state.toLowerCase())) {
+                            statusClass = "status-on";
+                        } else {
+                            statusClass = "status-off";
+                        }
+                    }
+
+                    // Kart HTML'ini oluştur
+                    board.innerHTML += `
+                        <div class="card">
+                            <span class="icon">${icon}</span>
+                            <h3>${device.toUpperCase().replace(/_/g, ' ')}</h3>
+                            <p class="${statusClass}">
+                                ${displayState}
+                            </p>
+                        </div>
+                    `;
+                }
+            } catch (e) { 
+                console.error("Bağlantı hatası:", e); 
+            }
+        }
+
+        // Her 1 saniyede bir güncelle
+        setInterval(update, 1000);
+        
+        // Sayfa açılınca hemen bir kez çalıştır
+        update();
+    </script>
+</body>
+</html>
