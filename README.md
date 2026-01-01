@@ -105,6 +105,7 @@ TEZ/
 ├── user_memory.txt         # Stores long-term user info
 ├── requirements.txt        # Project dependencies
 └── .env                    # Environment variables (API Keys)
+```
 
 
 #  Installation & Setup
