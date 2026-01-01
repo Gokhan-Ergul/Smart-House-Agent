@@ -1,5 +1,7 @@
 {
-    "rules": [],
+    "rules": [
+        "Say thank you every time you answer me"
+    ],
     "operations": [
         {
             "home_operations": [
@@ -7,6 +9,24 @@
                 "turn off light"
             ],
             "operation_name": "dark mode"
+        },
+        {
+            "home_operations": [
+                "close curtain",
+                "turn off light",
+                "close main water valve",
+                "set thermostat to off"
+            ],
+            "operation_name": "good night mode"
+        },
+        {
+            "home_operations": [
+                "turn off light",
+                "turn on tv",
+                "close curtain",
+                "lock door"
+            ],
+            "operation_name": "Movie Time"
         }
     ]
 }
