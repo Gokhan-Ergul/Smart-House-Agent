@@ -24,9 +24,18 @@
                 "turn off light",
                 "turn on tv",
                 "close curtain",
-                "lock door"
+                "unlock door"
             ],
             "operation_name": "Movie Time"
+        },
+        {
+            "home_operations": [
+                "open curtain",
+                "turn on tv",
+                "turn off light",
+                "lock door"
+            ],
+            "operation_name": "Rain Mode"
         }
     ]
 }
