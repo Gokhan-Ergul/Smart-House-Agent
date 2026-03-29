@@ -1,41 +1,58 @@
+import json
+import logging
+import os
+import sys
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
-from fastapi.responses import FileResponse
 import uvicorn
-import os
-import json
+
+# Allow running from `app/` while package lives under `src/`
+_ROOT = Path(__file__).resolve().parents[1]
+if str(_ROOT / "src") not in sys.path:
+    sys.path.insert(0, str(_ROOT / "src"))
+
+from smart_house_agent.config import get_settings  # noqa: E402
+
+logger = logging.getLogger(__name__)
+
+settings = get_settings()
+DB_FILE = str(settings.home_status_path.resolve())
+
+logging.basicConfig(
+    level=getattr(logging, settings.log_level.upper(), logging.INFO),
+    format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+)
 
 app = FastAPI()
 
-# File path (Make sure this matches where your notebook saves it!)
 
-# 1. Get the folder where 'main.py' lives (i.e., .../TEZ/app)
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-DB_FILE = os.path.join(parent_dir, "home_status.json")
-
-# --- HELPER: Load DB from file ---
 def load_db():
     """Reads the latest state from the JSON file."""
     if not os.path.exists(DB_FILE):
-        # Default state if file doesn't exist yet
         return {
-            "light": "off", "tv": "off", "curtain": "closed",
-            "door_lock": "locked", "thermostat_mode": "off",
-            "main_water_valve": "closed"
+            "light": "off",
+            "tv": "off",
+            "curtain": "closed",
+            "door_lock": "locked",
+            "thermostat_mode": "off",
+            "main_water_valve": "closed",
         }
     try:
-        with open(DB_FILE, "r") as f:
+        with open(DB_FILE, encoding="utf-8") as f:
             return json.load(f)
-    except:
-        return {} # Handle empty/corrupt file errors
+    except OSError:
+        return {}
 
-# --- HELPER: Save DB to file (if API also updates it) ---
+
 def save_db_from_api(data):
-    with open(DB_FILE, "w") as f:
+    with open(DB_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,37 +61,34 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class DeviceCommand(BaseModel):
     device_id: str = Field(..., description="The device to control")
     action: str = Field(..., description="The action to perform on the device")
 
+
 @app.get("/status")
 def get_status():
-    # ALWAYS load from file to get the Notebook's latest changes
     current_db = load_db()
     return current_db
+
 
 @app.post("/update_device")
 def update_device(command: DeviceCommand):
     device_id = command.device_id.lower()
     action = command.action.lower()
-    
-    # 1. Load current state
-    current_db = load_db()
-    
-    if device_id in current_db:
-        # 2. Update state
-        current_db[device_id] = action
-        
-        # 3. Save back to file so Notebook sees it too
-        save_db_from_api(current_db)
-        
-        print(f"Updated {device_id} -> {action}")
-        return {'status': 'success', 'device_id': device_id, 'new_state': action}
-    else:
-        raise HTTPException(status_code=404, detail=f"Device {device_id} not found")
 
-@app.get("/") 
+    current_db = load_db()
+
+    if device_id in current_db:
+        current_db[device_id] = action
+        save_db_from_api(current_db)
+        logger.info("Updated %s -> %s", device_id, action)
+        return {"status": "success", "device_id": device_id, "new_state": action}
+    raise HTTPException(status_code=404, detail=f"Device {device_id} not found")
+
+
+@app.get("/")
 async def read_index():
     file_path = "static/index.html"
     if not os.path.exists(file_path):
@@ -84,4 +98,9 @@ async def read_index():
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=242)
+
+# http://localhost:242/ please use this URL to acccess the dashboard after running the server.
+
+#Terminal A: cd app → python main.py → dashboard  
+#Terminal B (repo root): python -m smart_house_agent.main "your question" (after pip install -r requirements.txt, pip install -e ., and .env with GOOGLE_API_KEY)
