@@ -9,9 +9,10 @@ venv/
 __pycache__/
 *.pyc
 
-# Jupyter
-.ipynb_checkpoints/
-
 # OS
 .DS_Store
 Thumbs.db
+
+# Build / test artifacts
+**/*.egg-info/
+.pytest_cache/
