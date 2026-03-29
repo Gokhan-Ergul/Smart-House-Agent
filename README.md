@@ -93,44 +93,56 @@ The system is built on **LangGraph** with a **Supervisor Node** that delegates t
 ##  Project Structure
 
 ```plaintext
-TEZ/
-├── .venv/                  # Python virtual environment
-├── app/                    # Simulation API Server
+Smart-House-Agent/
+├── src/smart_house_agent/   # LangGraph agents, tools, graphs, CLI
+├── tests/                   # pytest
+├── app/                     # FastAPI device simulator + dashboard
 │   ├── static/
-│   │   └── index.html      # Web Dashboard for viewing device states
-│   └── main.py             # FastAPI server script
-├── home_status.json        # Shared "Database" (Syncs Agent & API state)
-├── projectv2.ipynb         # Main Application Logic (LangGraph Agents)
-├── rules_operations.json   # Stores user-defined automation rules
-├── user_memory.txt         # Stores long-term user info
-├── requirements.txt        # Project dependencies
-└── .env                    # Environment variables (API Keys)
+│   │   └── index.html
+│   └── main.py
+├── docs/                    # Project layout and guides
+├── pyproject.toml           # Package metadata (pip install -e .)
+├── requirements.txt
+├── .env.example             # Copy to .env and set GOOGLE_API_KEY
+├── home_status.json         # Runtime: device state (with API)
+├── rules_operations.json    # Runtime: rules & routines
+└── user_memory.txt          # Runtime: saved user profile text
 ```
 
 
 #  Installation & Setup
 
 ## 1️ Clone the Repository
+
+```bash
 git clone https://github.com/Gokhan-Ergul/Smart-House-Agent.git
-cd TEZ
+cd Smart-House-Agent
+```
 
 ---
 
 ##  Set Up Virtual Environment
+
+```bash
 python -m venv .venv
+```
 
 ### Activate the environment
 
-Windows  
-.venv\Scripts\activate  
+**Windows:** `.venv\Scripts\activate`  
 
-Mac / Linux  
-source .venv/bin/activate  
+**Mac / Linux:** `source .venv/bin/activate`
 
 ---
 
 ## Install Dependencies
+
+```bash
 pip install -r requirements.txt
+pip install -e .
+```
+
+Copy `.env.example` to `.env` and set `GOOGLE_API_KEY` (and optionally `SMART_HOUSE_API_URL`).
 
 ---
 
@@ -142,31 +154,37 @@ This system requires **two components running simultaneously**.
 
 ##  Step 1: Start the Simulation Server
 
-Navigate to the app folder and start FastAPI:
+From the **`app`** folder, start FastAPI (keep this terminal open):
 
-cd app  
+```bash
+cd app
 python main.py
+```
 
 ###  Dashboard
-Open your browser at:
-http://127.0.0.1:8000  
 
-to view live device states.
+Open **http://127.0.0.1:8000** in your browser to view device states.
 
 ---
 
-##  Step 2: Run the Agent System
+##  Step 2: Run the Agent (same workflow as before, without Jupyter)
 
-Open `projectv2.ipynb` in VS Code or Jupyter Notebook  
-Run all initialization cells  
+Open a **second** terminal at the **repository root** (venv activated, `pip install -e .` already done):
 
-Use the `run_query` function to interact with the system:
+```bash
+python -m smart_house_agent.main "Turn on the light and lock the front door."
+```
 
-run_query("Turn on the light and lock the front door.", graph)  
+Other examples:
 
-run_query("Create a 'Cinema Mode' that turns off the lights and turns on the TV.", graph)  
+```bash
+python -m smart_house_agent.main "What is the weather like today?"
+python -m smart_house_agent.main "Create a Cinema Mode that turns off the lights and turns on the TV."
+```
 
-run_query("It's getting dark, should I close the curtains?", graph)  
+For **streaming debug output** (similar to stepping through the notebook), use `run_query` in Python after building the graph—see `src/smart_house_agent/runner.py` and `build_supervisor_application` in `src/smart_house_agent/graph/supervisor_graph.py`.
+
+More detail on folders and files: **`docs/PROJECT_LAYOUT.md`**.
 
 ---
 
