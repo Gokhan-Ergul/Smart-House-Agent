@@ -172,6 +172,10 @@ Open **http://127.0.0.1:8000** in your browser to view device states.
 Open a **second** terminal at the **repository root** (venv activated, `pip install -e .` already done):
 
 ```bash
+cd .\src\
+```
+
+```bash
 python -m smart_house_agent.main "Turn on the light and lock the front door."
 ```
 
