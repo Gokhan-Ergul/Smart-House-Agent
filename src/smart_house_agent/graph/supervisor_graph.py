@@ -55,7 +55,7 @@ def build_supervisor_application(
         home_status,
         rules_store,
         llm,
-        home_system_tools,
+        home_system_tools + [get_weather],
     )
     rule_operations = build_rule_operations_graph(llm, rules_store.path)
 

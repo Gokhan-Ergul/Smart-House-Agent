@@ -132,7 +132,9 @@ User Request:"""
                     home_status.update_device(device_id, action)
 
                 except json.JSONDecodeError:
-                    response_sentences.append("Task completed.")
+                    # Prevent logic error: If a tool returns raw text (like get_weather),
+                    # keep the original text instead of swallowing it with "Task completed."
+                    response_sentences.append(str(tool_msg.content))
             home_status.save()
 
             final_response = " ".join(response_sentences)

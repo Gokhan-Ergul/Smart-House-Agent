@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     gemini_temperature: float = Field(default=0.5, alias="GEMINI_TEMPERATURE")
 
     smart_house_api_url: str = Field(
-        default="http://127.0.0.1:8000",
+        default="http://127.0.0.1:242",
         alias="SMART_HOUSE_API_URL",
     )
 
