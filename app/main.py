@@ -9,8 +9,6 @@ import json
 
 app = FastAPI()
 
-# File path (Make sure this matches where your notebook saves it!)
-
 # 1. Get the folder where 'main.py' lives (i.e., .../TEZ/app)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -83,5 +81,6 @@ async def read_index():
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
+# Local Host
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
