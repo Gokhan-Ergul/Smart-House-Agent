@@ -132,7 +132,7 @@ User Request:"""
                     home_status.update_device(device_id, action)
 
                 except json.JSONDecodeError:
-                    response_sentences.append("Task completed.")
+                    response_sentences.append(str(tool_msg.content))
             home_status.save()
 
             final_response = " ".join(response_sentences)

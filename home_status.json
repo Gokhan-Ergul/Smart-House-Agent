@@ -1,1 +1,1 @@
-{"light": "off", "tv": "on", "curtain": "open", "door_lock": "locked", "thermostat_mode": "on", "main_water_valve": "closed"}
+{"light": "on", "tv": "on", "curtain": "open", "door_lock": "unlock", "thermostat_mode": "on", "main_water_valve": "closed"}

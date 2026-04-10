@@ -55,7 +55,7 @@ def build_supervisor_application(
         home_status,
         rules_store,
         llm,
-        home_system_tools,
+        home_system_tools + [get_weather],
     )
     rule_operations = build_rule_operations_graph(llm, rules_store.path)
 
@@ -97,6 +97,6 @@ def maybe_warmup_api(client: HomeApiClient) -> None:
         client.post_update_device("thermostat_mode", "set_mode_off")
     except Exception:
         logger.warning(
-            "To run this code, you must ensure the home automation API server is running at localhost:242. "
+            "To run this code, you must ensure the home automation API server is running at localhost:8000. "
             "Or you can continue without api connection for testing purposes."
         )
