@@ -50,6 +50,8 @@ A **FastAPI server** provides:
 
 ## System Architecture
 
+![alt text](agent.png)
+
 The system is built on **LangGraph** with a **Supervisor Node** that delegates tasks to specialized agents:
 
 ###  Home Operations Agent 
