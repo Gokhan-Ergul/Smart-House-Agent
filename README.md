@@ -48,6 +48,8 @@ A **FastAPI server** provides a visual dashboard to simulate and monitor smart h
 
 ## System Architecture
 
+<img width="604" height="192" alt="agent" src="https://github.com/user-attachments/assets/2b2a67f1-a0d9-48fa-9065-a703ed37b89b" />
+
 The system is built on **LangGraph** with a **Supervisor Node** that delegates tasks to specialized agents:
 
 ###  Home Operations Agent 
