@@ -41,8 +41,10 @@ Integrated **Weather Tool** allows context-based decisions:
 
 ---
 
-###  Simulation Environment
-A **FastAPI server** provides a visual dashboard to simulate and monitor smart home device states — no physical hardware required.
+###  Simulation & Chat Environment
+A **FastAPI server** provides:
+- A **Web-Based Chat Interface** (`/`) to interact with the agent natively and observe its real-time thought process and tool usage.
+- A **Visual Dashboard** (`/dashboard`) to monitor and simulate smart home device states — no physical hardware required.
 
 ---
 
@@ -148,11 +150,11 @@ Copy `.env.example` to `.env` and set `GOOGLE_API_KEY` (and optionally `SMART_HO
 
 #  Usage Guide
 
-This system requires **two components running simultaneously**.
+You can interact with the system via the **Web UI** or the **Command Line (CLI)**.
 
 ---
 
-##  Step 1: Start the Simulation Server
+##  Start the Simulation Server (Required)
 
 From the **`app`** folder, start FastAPI (keep this terminal open):
 
@@ -161,21 +163,20 @@ cd app
 python main.py
 ```
 
-###  Dashboard
+###  1. Web UI & Dashboard (Recommended)
 
-Open **http://127.0.0.1:8000** in your browser to view device states.
+Once the server is running, simply open your browser:
+- **Chat Interface:** [http://127.0.0.1:8000](http://127.0.0.1:8000) (Natural language control with live agent thought stream)
+- **Device Dashboard:** [http://127.0.0.1:8000/dashboard](http://127.0.0.1:8000/dashboard) (Live visual state of all edge devices)
 
 ---
 
-##  Step 2: Run the Agent (same workflow as before, without Jupyter)
+##  2. Run the Agent via CLI (Alternative)
 
-Open a **second** terminal at the **repository root** (venv activated, `pip install -e .` already done):
+If you prefer using the terminal, open a **second** terminal at the **repository root** (venv activated):
 
 ```bash
 cd .\src\
-```
-
-```bash
 python -m smart_house_agent.main "Turn on the light and lock the front door."
 ```
 
@@ -186,7 +187,7 @@ python -m smart_house_agent.main "What is the weather like today?"
 python -m smart_house_agent.main "Create a Cinema Mode that turns off the lights and turns on the TV."
 ```
 
-For **streaming debug output** (similar to stepping through the notebook), use `run_query` in Python after building the graph—see `src/smart_house_agent/runner.py` and `build_supervisor_application` in `src/smart_house_agent/graph/supervisor_graph.py`.
+For **streaming debug output** programmatically, use `run_query` in Python—see `src/smart_house_agent/runner.py`.
 
 More detail on folders and files: **`docs/PROJECT_LAYOUT.md`**.
 
