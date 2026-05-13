@@ -157,9 +157,17 @@ async def _stream_agent(user_message: str) -> AsyncGenerator[str, None]:
                         # ── AI text message ───────────────────────────────
                         elif isinstance(msg, AIMessage) and msg.content:
                             # Only capture non-routing/handoff messages as final answer
-                            content = str(msg.content)
-                            if not content.startswith("[SYSTEM_REPORT]"):
-                                final_answer = content
+                            if isinstance(msg.content, list):
+                                text_parts = [
+                                    p.get("text", "") if isinstance(p, dict) else str(p)
+                                    for p in msg.content
+                                ]
+                                content_str = "".join(text_parts).strip()
+                            else:
+                                content_str = str(msg.content).strip()
+
+                            if content_str and not content_str.startswith("[SYSTEM_REPORT]"):
+                                final_answer = content_str
 
         # ── Emit the final reply ──────────────────────────────────────────
         if final_answer:
@@ -215,24 +223,26 @@ async def chat_stream(req: ChatRequest):
 
 
 # ── Static files & HTML routes ────────────────────────────────────────────────
+_STATIC_DIR = Path(__file__).resolve().parent / "static"
+
 @app.get("/dashboard")
 async def read_dashboard():
-    f = Path("static/dashboard.html")
+    f = _STATIC_DIR / "dashboard.html"
     if not f.exists():
-        raise HTTPException(status_code=404, detail="Dashboard not found")
+        raise HTTPException(status_code=404, detail=f"Dashboard not found at {f}")
     return FileResponse(str(f))
 
 
 @app.get("/")
 async def read_index():
-    f = Path("static/index.html")
+    f = _STATIC_DIR / "index.html"
     if not f.exists():
-        return {"error": f"index.html not found in {os.getcwd()}/static/"}
+        return {"error": f"index.html not found in {_STATIC_DIR}"}
     return FileResponse(str(f))
 
 
 # Mount static files LAST so explicit routes take precedence
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+app.mount("/", StaticFiles(directory=str(_STATIC_DIR), html=True), name="static")
 
 
 if __name__ == "__main__":
