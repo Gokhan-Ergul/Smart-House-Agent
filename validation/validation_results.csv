@@ -15,7 +15,7 @@ T13,general_conversation,Hello! How are you?,supervisor,,1.0,1.0,1.0,1.02,0.94,1
 T14,general_conversation,What can you do?,supervisor,,1.0,1.0,1.0,1.67,1.37,2.08,0.37,724,194,918,
 T15,error_handling,Make me a coffee,home_operations,notify_unsupported_action,1.0,1.0,1.0,3.66,3.14,4.11,0.49,3161,303,3464,
 T16,error_handling,Turn on the dishwasher,home_operations,notify_unsupported_action,1.0,1.0,1.0,4.04,3.32,4.72,0.7,3155,372,3527,
-T17,error_handling,Turn on the light and turn off the light,home_operations,control_light,1.0,1.0,1.0,28.01,4.58,65.05,32.45,9120,4924,14045,
+T17,error_handling,Turn on the light and turn off the light,home_operations,control_light,1.0,1.0,1.0,3.75,3.43,4.37,0.54,3147,264,3411,
 T18,multi_step,"Turn on all the lights, check the weather, and if it is off set the thermostat on.",home_operations,control_light;get_weather;control_thermostat,1.0,1.0,1.0,21.95,19.37,25.13,2.93,3170,2741,5910,
 T19,multi_step,"Create a Morning Routine: open curtains, turn on lights. Then activate Morning Routine.",rule_operations,,1.0,1.0,1.0,3.83,3.16,4.38,0.62,1565,173,1738,
 T20,multi_step,Set the thermostat to heating mode and unlock the front door,home_operations,control_thermostat;control_lock,1.0,1.0,1.0,4.26,3.72,4.69,0.5,3239,466,3705,
