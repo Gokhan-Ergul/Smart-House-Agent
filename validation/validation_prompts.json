@@ -1,0 +1,202 @@
+[
+  {
+    "id": "T01",
+    "prompt": "Turn on the lights",
+    "category": "device_control",
+    "expected_agent": "home_operations",
+    "expected_tools": ["control_light"],
+    "expected_outcome": "Light turned on",
+    "expected_device_state": {"light": "on"},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T02",
+    "prompt": "Turn on the lights and lock the door",
+    "category": "device_control",
+    "expected_agent": "home_operations",
+    "expected_tools": ["control_light", "control_lock"],
+    "expected_outcome": "Light on, door locked",
+    "expected_device_state": {"light": "on", "door_lock": "locked"},
+    "difficulty": "medium"
+  },
+  {
+    "id": "T03",
+    "prompt": "Turn off the light",
+    "category": "device_control",
+    "expected_agent": "home_operations",
+    "expected_tools": ["control_light"],
+    "expected_outcome": "Light turned off or no action if already off",
+    "expected_device_state": {"light": "off"},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T04",
+    "prompt": "Open the curtains and turn on the TV",
+    "category": "device_control",
+    "expected_agent": "home_operations",
+    "expected_tools": ["control_curtain", "control_tv"],
+    "expected_outcome": "Curtain opened, TV turned on",
+    "expected_device_state": {"curtain": "open", "tv": "on"},
+    "difficulty": "medium"
+  },
+  {
+    "id": "T05",
+    "prompt": "Close the main water valve",
+    "category": "device_control",
+    "expected_agent": "home_operations",
+    "expected_tools": ["control_water_valve"],
+    "expected_outcome": "Water valve closed",
+    "expected_device_state": {"main_water_valve": "closed"},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T06",
+    "prompt": "Create a Cinema Mode: turn off the lights, turn on the TV, and close the curtains",
+    "category": "rule_management",
+    "expected_agent": "rule_operations",
+    "expected_tools": [],
+    "expected_outcome": "Cinema Mode rule created and persisted",
+    "expected_device_state": {},
+    "difficulty": "medium"
+  },
+  {
+    "id": "T07",
+    "prompt": "Update Cinema Mode to also lock the door",
+    "category": "rule_management",
+    "expected_agent": "rule_operations",
+    "expected_tools": [],
+    "expected_outcome": "Cinema Mode rule updated with door lock",
+    "expected_device_state": {},
+    "difficulty": "medium"
+  },
+  {
+    "id": "T08",
+    "prompt": "Delete Cinema Mode",
+    "category": "rule_management",
+    "expected_agent": "rule_operations",
+    "expected_tools": [],
+    "expected_outcome": "Cinema Mode rule deleted",
+    "expected_device_state": {},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T09",
+    "prompt": "My name is Gokhan and I prefer warm temperatures",
+    "category": "user_memory",
+    "expected_agent": "add_user_info",
+    "expected_tools": [],
+    "expected_outcome": "User name and preference stored in memory",
+    "expected_device_state": {},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T10",
+    "prompt": "What is my name?",
+    "category": "user_memory",
+    "expected_agent": "supervisor",
+    "expected_tools": [],
+    "expected_outcome": "System recalls user name from memory",
+    "expected_device_state": {},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T11",
+    "prompt": "What is the weather like today?",
+    "category": "weather",
+    "expected_agent": "supervisor",
+    "expected_tools": ["get_weather"],
+    "expected_outcome": "Weather information returned",
+    "expected_device_state": {},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T12",
+    "prompt": "I am going outside, should I take an umbrella?",
+    "category": "weather",
+    "expected_agent": "supervisor",
+    "expected_tools": ["get_weather"],
+    "expected_outcome": "Weather-based recommendation provided",
+    "expected_device_state": {},
+    "difficulty": "medium"
+  },
+  {
+    "id": "T13",
+    "prompt": "Hello! How are you?",
+    "category": "general_conversation",
+    "expected_agent": "supervisor",
+    "expected_tools": [],
+    "expected_outcome": "Greeting response",
+    "expected_device_state": {},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T14",
+    "prompt": "What can you do?",
+    "category": "general_conversation",
+    "expected_agent": "supervisor",
+    "expected_tools": [],
+    "expected_outcome": "Capability description",
+    "expected_device_state": {},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T15",
+    "prompt": "Make me a coffee",
+    "category": "error_handling",
+    "expected_agent": "home_operations",
+    "expected_tools": ["notify_unsupported_action"],
+    "expected_outcome": "Unsupported device notification",
+    "expected_device_state": {},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T16",
+    "prompt": "Turn on the dishwasher",
+    "category": "error_handling",
+    "expected_agent": "home_operations",
+    "expected_tools": ["notify_unsupported_action"],
+    "expected_outcome": "Unsupported device notification",
+    "expected_device_state": {},
+    "difficulty": "simple"
+  },
+  {
+    "id": "T17",
+    "prompt": "Turn on the light and turn off the light",
+    "category": "error_handling",
+    "expected_agent": "home_operations",
+    "expected_tools": ["control_light"],
+    "expected_outcome": "Handles conflicting commands gracefully",
+    "expected_device_state": {},
+    "difficulty": "hard"
+  },
+  {
+    "id": "T18",
+    "prompt": "Turn on all the lights, check the weather, and if it is off set the thermostat on.",
+    "category": "multi_step",
+    "expected_agent": "home_operations",
+    "expected_tools": ["control_light", "get_weather", "control_thermostat"],
+    "expected_outcome": "Multi-step: devices controlled based on weather context",
+    "expected_device_state": {"light": "on"},
+    "difficulty": "hard"
+  },
+  {
+    "id": "T19",
+    "prompt": "Create a Morning Routine: open curtains, turn on lights. Then activate Morning Routine.",
+    "category": "multi_step",
+    "expected_agent": "rule_operations",
+    "expected_tools": [],
+    "expected_outcome": "Rule created then potentially activated",
+    "expected_device_state": {},
+    "difficulty": "hard"
+  },
+  {
+    "id": "T20",
+    "prompt": "Set the thermostat to heating mode and unlock the front door",
+    "category": "multi_step",
+    "expected_agent": "home_operations",
+    "expected_tools": ["control_thermostat", "control_lock"],
+    "expected_outcome": "Thermostat on, door unlocked",
+    "expected_device_state": {"thermostat_mode": "on", "door_lock": "unlocked"},
+    "difficulty": "medium"
+  }
+]
